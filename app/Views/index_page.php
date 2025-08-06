@@ -17,7 +17,7 @@
 
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="<?php echo base_url('css/style.css')?>"/>
+    <link rel="stylesheet" href="<?php echo base_url('css/style.css') ?>"/>
 </head>
 <body>
 
@@ -45,7 +45,7 @@
 
 <!-- ----------------- Call-to-Action Buttons ----------------- -->
 <div class="container text-center my-4">
-    <button class="btn btn-success">
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrationModal">
         Click to add yourself in blood donor list to view all donors
     </button>
     <button class="btn btn-primary">
@@ -153,6 +153,74 @@
         </tbody>
     </table>
 </div>
+
+
+<!-- ---------------------- registration modal ---------------------- -->
+
+<div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <form id="registrationForm" action="<?= base_url('register') ?>" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registrationModalLabel">Register / Update Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" required name="name">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Contact Number <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control" required name="contact">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Blood Group <span class="text-danger">*</span></label>
+                            <select class="form-select" name="blood_group">
+                                <option></option>
+                                <option>A+</option>
+                                <option>A-</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">District <span class="text-danger">*</span></label>
+                            <select class="form-select" required name="district">
+                                <option></option>
+                                <option>Dhaka</option>
+                                <option>Chattogram</option>
+                                <option>Rajshahi</option>
+                                <option>Khulna</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Thana <span class="text-danger">*</span></label>
+                            <select class="form-select" required name="thana">
+                                <option></option>
+                                <option>Mirpur</option>
+                                <option>Gulshan</option>
+                                <option>Savar</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Last Donation Date <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" required name="donation_date">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Password <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control" required name="password">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <!-- ----------------- Scripts Section ----------------- -->
 
