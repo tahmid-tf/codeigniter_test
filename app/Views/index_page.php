@@ -126,30 +126,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>1</td>
-            <td>01828665566</td>
-            <td>Tahmid</td>
-            <td>B+</td>
-            <td>Dhanmondi</td>
-            <td>Today</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>01515668259</td>
-            <td>Ferdous</td>
-            <td>B+</td>
-            <td>Dhanmondi</td>
-            <td>6m 6days ago</td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>01515668200</td>
-            <td>Niloy</td>
-            <td>O+</td>
-            <td>Dhanmondi</td>
-            <td>1y 3m 21d ago</td>
-        </tr>
+        <!-- ----------------------- data will render here ----------------------- -->
         </tbody>
     </table>
 </div>
@@ -182,6 +159,12 @@
                                 <option></option>
                                 <option>A+</option>
                                 <option>A-</option>
+                                <option>B+</option>
+                                <option>B-</option>
+                                <option>AB+</option>
+                                <option>AB-</option>
+                                <option>O+</option>
+                                <option>O-</option>
                             </select>
                         </div>
                         <div class="col-md-12">
@@ -221,6 +204,8 @@
     </div>
 </div>
 
+<!-- ----------------- API rendering section ----------------- -->
+
 
 <!-- ----------------- Scripts Section ----------------- -->
 
@@ -237,6 +222,7 @@
 <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
 
 <!-- Initialization Scripts -->
+
 <script>
     $(document).ready(function () {
         // Initialize all select2 filters
@@ -247,9 +233,39 @@
             }
         });
 
-        // Initialize DataTable
-        new DataTable('#example');
+        // Initialize DataTable with AJAX
+        let table = $('#example').DataTable({
+            ajax: {
+                url: '/user_data',
+                dataSrc: 'data.users'
+            },
+            columns: [
+                {data: 'id'},
+                {data: 'contact'},
+                {data: 'name'},
+                {data: 'blood_group'},
+                {data: 'thana'},
+                {data: 'donation_date'}
+            ]
+        });
+
+        // Reload DataTable with filters
+        function reloadTableWithFilters() {
+            let blood_group = $('#filter-group').val();
+            let district = $('#filter-district').val();
+            let thana = $('#filter-upazila').val();
+            let date_filter = $('#filter-date').val();
+
+            table.ajax.url('/user_data?group=' + blood_group + '&district=' + district + '&thana=' + thana + '&date=' + date_filter).load();
+        }
+
+        // Trigger filter
+        $('#filter-group, #filter-district, #filter-upazila, #filter-date').on('change', function () {
+            reloadTableWithFilters();
+        });
     });
 </script>
+
+
 </body>
 </html>

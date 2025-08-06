@@ -34,13 +34,50 @@ class BaseIndexController extends BaseController
 
     public function user_data()
     {
-        $model = new UserModel();
+        $model = new \App\Models\UserModel();
 
-        // Get all rows from the 'users' table
-        $data['users'] = $model->findAll();
+        // Get query parameters
+        $group = $this->request->getGet('group');
+        $district = $this->request->getGet('district');
+        $thana = $this->request->getGet('thana');
+        $date = $this->request->getGet('date');
 
-        return $this->response->setJSON([
-            'data' => $data
-        ]);
+        // Start query
+        $builder = $model;
+
+        if ($group) {
+            $builder->where('blood_group', $group);
+        }
+
+        if ($district) {
+            $builder->where('district', $district);
+        }
+
+        if ($thana) {
+            $builder->where('thana', $thana);
+        }
+
+        if ($date) {
+            $now = date('Y-m-d');
+            switch ($date) {
+                case 'Last 7 days':
+                    $builder->where('donation_date >=', date('Y-m-d', strtotime('-7 days')));
+                    break;
+                case 'Last 30 days':
+                    $builder->where('donation_date >=', date('Y-m-d', strtotime('-30 days')));
+                    break;
+                case '3 months ago':
+                    $builder->where('donation_date >=', date('Y-m-d', strtotime('-3 months')));
+                    break;
+                case '6+ months ago':
+                    $builder->where('donation_date <=', date('Y-m-d', strtotime('-6 months')));
+                    break;
+            }
+        }
+
+        $users = $builder->findAll();
+
+        return $this->response->setJSON(['data' => ['users' => $users]]);
     }
+
 }
