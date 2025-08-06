@@ -1,0 +1,17 @@
+.blood_group_heading, .blood_group_p, .blood_group_community_link, .blood_donation_welfare_title{
+    text-align: center;
+}
+
+.blood_group_community_link{
+    color: blueviolet;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+}
+
+.blood_donation_welfare_title{
+    color: green;
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 40px;
+}
