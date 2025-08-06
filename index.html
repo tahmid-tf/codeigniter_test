@@ -61,7 +61,7 @@
 <div class="container my-4">
     <div class="row g-3">
         <!-- Filter Group -->
-        <div class="col-md-3">
+        <div class="col-md-3 col-sm-12">
             <select id="filter-group" class="form-select select2" data-placeholder="Filter Group">
                 <option></option>
                 <option>A+</option>
@@ -76,7 +76,7 @@
         </div>
 
         <!-- Filter District -->
-        <div class="col-md-3">
+        <div class="col-md-3 col-sm-12">
             <select id="filter-district" class="form-select select2" data-placeholder="Filter District">
                 <option></option>
                 <option>Dhaka</option>
@@ -87,7 +87,7 @@
         </div>
 
         <!-- Filter Upazila -->
-        <div class="col-md-3">
+        <div class="col-md-3 col-sm-12">
             <select id="filter-upazila" class="form-select select2" data-placeholder="Choose a district first!">
                 <option></option>
                 <option>Mirpur</option>
@@ -97,7 +97,7 @@
         </div>
 
         <!-- Donation Date -->
-        <div class="col-md-3">
+        <div class="col-md-3 col-sm-12">
             <select id="filter-date" class="form-select select2" data-placeholder="Donation date">
                 <option></option>
                 <option>Last 7 days</option>
@@ -114,30 +114,38 @@
     <table id="example" class="display" style="width:100%">
         <thead>
         <tr>
+            <th>ID</th>
+            <th>Phone</th>
             <th>Name</th>
-            <th>Position</th>
-            <th>Office</th>
-            <th>Age</th>
-            <th>Start date</th>
-            <th>Salary</th>
+            <th>Group</th>
+            <th>Location</th>
+            <th>Last Donation</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td>Tiger Nixon</td>
-            <td>System Architect</td>
-            <td>Edinburgh</td>
-            <td>61</td>
-            <td>2011-04-25</td>
-            <td>$320,800</td>
+            <td>1</td>
+            <td>01828665566</td>
+            <td>Tahmid</td>
+            <td>B+</td>
+            <td>Dhanmondi</td>
+            <td>Today</td>
         </tr>
         <tr>
-            <td>Garrett Winters</td>
-            <td>Accountant</td>
-            <td>Tokyo</td>
-            <td>63</td>
-            <td>2011-07-25</td>
-            <td>$170,750</td>
+            <td>2</td>
+            <td>01515668259</td>
+            <td>Ferdous</td>
+            <td>B+</td>
+            <td>Dhanmondi</td>
+            <td>6m 6days ago</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>01515668200</td>
+            <td>Niloy</td>
+            <td>O+</td>
+            <td>Dhanmondi</td>
+            <td>1y 3m 21d ago</td>
         </tr>
         </tbody>
     </table>
