@@ -45,12 +45,34 @@
 
 <!-- ----------------- Call-to-Action Buttons ----------------- -->
 <div class="container text-center my-4">
-    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrationModal">
-        Click to add yourself in blood donor list to view all donors
-    </button>
-    <button class="btn btn-primary">
-        Login to view & update my information!
-    </button>
+
+    <?php if (!session()->get('logged_in')): ?>
+
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrationModal">
+            Click to add yourself in blood donor list to view all donors
+        </button>
+
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#LoginModal">
+            Login to view & update my information!
+        </button>
+
+    <?php else: ?>
+
+    <div style="display: flex; justify-content: center">
+        <button class="btn btn-info" style="color: white">
+            Click to update my information
+        </button>
+
+        <form action="<?= base_url('logout') ?>" method="get" style="margin-left: 10px">
+            <button class="btn btn-danger" style="color: white" type="submit">
+                Logout
+            </button>
+        </form>
+    </div>
+
+
+    <?php endif; ?>
+
 
     <br><br>
     <p class="blood_group_p">You don't have to be a doctor to save lives!</p>
@@ -91,7 +113,7 @@
 
         <!-- Filter Upazila -->
         <div class="col-md-3 col-sm-12">
-            <select id="filter-upazila" class="form-select select2" data-placeholder="Choose a district first!">
+            <select id="filter-upazila" class="form-select select2" data-placeholder="Filter Thana!">
                 <option></option>
                 <option>Mirpur</option>
                 <option>Gulshan</option>
@@ -141,7 +163,7 @@
         <div class="modal-content">
             <form id="registrationForm" action="<?= base_url('register') ?>" method="post">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="registrationModalLabel">Register / Update Information</h5>
+                    <h5 class="modal-title" id="registrationModalLabel">Register Information</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -205,7 +227,109 @@
     </div>
 </div>
 
-<!-- ----------------- API rendering section ----------------- -->
+<!-- ---------------------- Update modal ---------------------- -->
+
+<div class="modal fade" id="UpdateModal" tabindex="-1" aria-labelledby="UpdateModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <form id="updateForm" action="<?= base_url('register') ?>" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateModalLabel">Register Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" required name="name">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Contact Number <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control" required name="contact">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Blood Group <span class="text-danger">*</span></label>
+                            <select class="form-select" name="blood_group">
+                                <option></option>
+                                <option>A+</option>
+                                <option>A-</option>
+                                <option>B+</option>
+                                <option>B-</option>
+                                <option>AB+</option>
+                                <option>AB-</option>
+                                <option>O+</option>
+                                <option>O-</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">District <span class="text-danger">*</span></label>
+                            <select class="form-select" required name="district">
+                                <option></option>
+                                <option>Dhaka</option>
+                                <option>Chattogram</option>
+                                <option>Rajshahi</option>
+                                <option>Khulna</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Thana <span class="text-danger">*</span></label>
+                            <select class="form-select" required name="thana">
+                                <option></option>
+                                <option>Mirpur</option>
+                                <option>Gulshan</option>
+                                <option>Savar</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Last Donation Date <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" required name="donation_date">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Password <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control" required name="password">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ---------------------- Login modal ---------------------- -->
+
+<div class="modal fade" id="LoginModal" tabindex="-1" aria-labelledby="LoginModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <form id="registrationForm" action="<?= base_url('login') ?>" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="LoginModalLabel">Login Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Phone<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" required name="phone">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label">Password <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control" required name="password">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 <!-- ----------------- Scripts Section ----------------- -->
@@ -251,6 +375,7 @@
             ]
         });
 
+
         // Reload DataTable with filters
         function reloadTableWithFilters() {
             let blood_group = $('#filter-group').val();
@@ -258,7 +383,12 @@
             let thana = $('#filter-upazila').val();
             let date_filter = $('#filter-date').val();
 
-            table.ajax.url('/user_data?group=' + blood_group + '&district=' + district + '&thana=' + thana + '&date=' + date_filter).load();
+            table.ajax.url(
+                '/user_data?group=' + encodeURIComponent(blood_group) +
+                '&district=' + encodeURIComponent(district) +
+                '&thana=' + encodeURIComponent(thana) +
+                '&date=' + encodeURIComponent(date_filter)
+            ).load();
         }
 
         // Trigger filter

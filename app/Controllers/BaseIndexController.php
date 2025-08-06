@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
-use DateTime;  // <-- Add this line
+use DateTime;
 
 class BaseIndexController extends BaseController
 {
@@ -47,7 +47,7 @@ class BaseIndexController extends BaseController
         $builder = $model;
 
         if ($group) {
-            $builder = $builder->where('blood_group', $group);
+            $builder = $builder->like('blood_group', $group);
         }
         if ($district) {
             $builder = $builder->where('district', $district);
