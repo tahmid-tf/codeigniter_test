@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
+use DateTime;  // <-- Add this line
 
 class BaseIndexController extends BaseController
 {
@@ -34,50 +35,85 @@ class BaseIndexController extends BaseController
 
     public function user_data()
     {
-        $model = new \App\Models\UserModel();
+        $model = new UserModel();
 
-        // Get query parameters
+        // Get filters from GET parameters
         $group = $this->request->getGet('group');
         $district = $this->request->getGet('district');
         $thana = $this->request->getGet('thana');
-        $date = $this->request->getGet('date');
+        $dateFilter = $this->request->getGet('date');
 
-        // Start query
+        // Build query with filters
         $builder = $model;
 
         if ($group) {
-            $builder->where('blood_group', $group);
+            $builder = $builder->where('blood_group', $group);
         }
-
         if ($district) {
-            $builder->where('district', $district);
+            $builder = $builder->where('district', $district);
         }
-
         if ($thana) {
-            $builder->where('thana', $thana);
+            $builder = $builder->where('thana', $thana);
         }
 
-        if ($date) {
-            $now = date('Y-m-d');
-            switch ($date) {
+        // Filter based on donation_date range
+        if ($dateFilter) {
+            $today = date('Y-m-d');
+            switch ($dateFilter) {
                 case 'Last 7 days':
-                    $builder->where('donation_date >=', date('Y-m-d', strtotime('-7 days')));
+                    $dateFrom = date('Y-m-d', strtotime('-7 days'));
+                    $builder = $builder->where('donation_date >=', $dateFrom);
                     break;
                 case 'Last 30 days':
-                    $builder->where('donation_date >=', date('Y-m-d', strtotime('-30 days')));
+                    $dateFrom = date('Y-m-d', strtotime('-30 days'));
+                    $builder = $builder->where('donation_date >=', $dateFrom);
                     break;
                 case '3 months ago':
-                    $builder->where('donation_date >=', date('Y-m-d', strtotime('-3 months')));
+                    $dateTo = date('Y-m-d', strtotime('-3 months'));
+                    $builder = $builder->where('donation_date <=', $dateTo);
                     break;
                 case '6+ months ago':
-                    $builder->where('donation_date <=', date('Y-m-d', strtotime('-6 months')));
+                    $dateTo = date('Y-m-d', strtotime('-6 months'));
+                    $builder = $builder->where('donation_date <=', $dateTo);
                     break;
             }
         }
 
         $users = $builder->findAll();
 
+        // Format donation_date to "Xy Xm Xd ago"
+        foreach ($users as &$user) {
+            $user['donation_date'] = $this->formatDateDiff($user['donation_date']);
+        }
+
         return $this->response->setJSON(['data' => ['users' => $users]]);
     }
+
+// Helper function to format date difference
+    private function formatDateDiff($date)
+    {
+        $datetime1 = new DateTime($date);
+        $datetime2 = new DateTime(); // now
+        $interval = $datetime1->diff($datetime2);
+
+        $result = '';
+        if ($interval->y > 0) {
+            $result .= $interval->y . 'y ';
+        }
+        if ($interval->m > 0) {
+            $result .= $interval->m . 'm ';
+        }
+        if ($interval->d > 0) {
+            $result .= $interval->d . 'd ';
+        }
+        if ($result === '') {
+            $result = 'Today';
+        } else {
+            $result .= 'ago';
+        }
+
+        return trim($result);
+    }
+
 
 }

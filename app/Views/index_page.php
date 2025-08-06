@@ -121,7 +121,8 @@
             <th>Phone</th>
             <th>Name</th>
             <th>Group</th>
-            <th>Location</th>
+            <th>District</th>
+            <th>Thana</th>
             <th>Last Donation</th>
         </tr>
         </thead>
@@ -244,6 +245,7 @@
                 {data: 'contact'},
                 {data: 'name'},
                 {data: 'blood_group'},
+                {data: 'district'},
                 {data: 'thana'},
                 {data: 'donation_date'}
             ]
