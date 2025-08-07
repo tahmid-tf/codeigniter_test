@@ -57,6 +57,15 @@ class BaseIndexController extends BaseController
 
     public function user_data()
     {
+
+        if (!session()->get('logged_in')) {
+            return $this->response->setJSON([
+                'data' => [
+                    'users' => [] // return empty user data
+                ]
+            ]);
+        }
+
         $model = new UserModel();
 
         // Get filters from GET parameters

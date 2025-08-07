@@ -19,12 +19,12 @@ class AuthController extends BaseController
         if ($user && password_verify($password, $user['password'])) {
             session()->set([
                 'user_id' => $user['id'],
-                'name'    => $user['name'],
-                'contact'   => $user['contact'],
-                'blood_group'   => $user['blood_group'],
-                'district'   => $user['district'],
-                'thana'   => $user['thana'],
-                'donation_date'   => $user['donation_date'],
+                'name' => $user['name'],
+                'contact' => $user['contact'],
+                'blood_group' => $user['blood_group'],
+                'district' => $user['district'],
+                'thana' => $user['thana'],
+                'donation_date' => $user['donation_date'],
                 'logged_in' => true
             ]);
             return redirect()->back();
@@ -46,12 +46,13 @@ class AuthController extends BaseController
 
     public function user()
     {
+
         if (session()->get('logged_in')) {
             return $this->response->setJSON([
                 'status' => 'success',
                 'user' => [
-                    'id'    => session()->get('user_id'),
-                    'name'  => session()->get('name'),
+                    'id' => session()->get('user_id'),
+                    'name' => session()->get('name'),
                     'phone' => session()->get('phone')
                 ]
             ]);
