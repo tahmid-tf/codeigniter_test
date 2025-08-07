@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\BloodGroupModel;
+use App\Models\DistrictModel;
 
 class ApiDataController extends BaseController
 {
@@ -26,5 +27,24 @@ class ApiDataController extends BaseController
             'data' => $blood_groups
         ]);
     }
+
+    public function districts_api_data()
+    {
+        $district_model = new DistrictModel();
+        $search = $this->request->getGet('q');
+
+        if ($search) {
+            $districts = $district_model
+                ->like('district', $search)
+                ->findAll();
+        } else {
+            $districts = [];
+        }
+
+        return $this->response->setJSON([
+            'data' => $districts
+        ]);
+    }
+
 
 }

@@ -114,13 +114,17 @@
 
 
         <div class="col-md-3 col-sm-12">
-            <select id="filter-district" class="form-select select2" data-placeholder="Filter District">
-                <option></option>
-                <option>Dhaka</option>
-                <option>Chattogram</option>
-                <option>Rajshahi</option>
-                <option>Khulna</option>
-            </select>
+<!--            <select id="filter-district" class="form-select select2" data-placeholder="Filter District">-->
+<!--                <option></option>-->
+<!--                <option>Dhaka</option>-->
+<!--                <option>Chattogram</option>-->
+<!--                <option>Rajshahi</option>-->
+<!--                <option>Khulna</option>-->
+<!--            </select>-->
+
+            <select id="filter-district" class="form-select select2" data-placeholder="Filter District"></select>
+
+
         </div>
 
         <!-- Filter Upazila -->
@@ -454,6 +458,7 @@
 
 <!-- -------------------------------- Filter group, filter district, filter upazilla action test --------------------------------  -->
 
+<!-- blood group portion -->
 <script>
     $(document).ready(function () {
         $('#filter-group').select2({
@@ -485,6 +490,38 @@
     });
 </script>
 
+<!-- --- district portion --- -->
+
+<script>
+    $(function () {
+        // District select2 with AJAX
+        $('#filter-district').select2({
+            placeholder: 'Filter District',
+            allowClear: true,
+            ajax: {
+                url: '/districts_api_data',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term // search query
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.data, function (district) {
+                            return {
+                                id: district.district,    // assuming the column name is `district`
+                                text: district.district
+                            };
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+    });
+</script>
 
 
 </body>

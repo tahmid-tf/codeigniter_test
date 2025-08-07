@@ -28,5 +28,6 @@ $routes->post('update-user', 'BaseIndexController::updateUser');
 // ------------------ blood group api ------------------
 
 $routes->get('blood_group_api_data', 'ApiDataController::blood_group_api_data');
+$routes->get('districts_api_data', 'ApiDataController::districts_api_data');
 
 
