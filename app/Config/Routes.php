@@ -12,7 +12,7 @@ $routes->get('/', 'BaseIndexController::index');
 
 $routes->post('/register', 'BaseIndexController::registration_form');
 
-// ------------------ retriving user data ------------------
+// ------------------ retrieving user data ------------------
 
 $routes->get('/user_data', 'BaseIndexController::user_data');
 
@@ -24,4 +24,9 @@ $routes->get('/logout', 'AuthController::logout');
 // ------------------ update user data ------------------
 
 $routes->post('update-user', 'BaseIndexController::updateUser');
+
+// ------------------ blood group api ------------------
+
+$routes->get('blood_group_api_data', 'ApiDataController::blood_group_api_data');
+
 
