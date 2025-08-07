@@ -33,9 +33,8 @@ $routes->get('thana_api_data', 'ApiDataController::thana_api_data');
 
 $routes->get('/thana_by_district_api_data', 'ApiDataController::thana_by_district_api_data');
 
-// -------------------- update modal code
 
-$routes->get('/get-thanas-by-district', 'ApiDataController::getThanasByDistrict');
+
 
 
 

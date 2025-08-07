@@ -68,21 +68,23 @@ class ApiDataController extends BaseController
     public function thana_by_district_api_data()
     {
         $thana_model = new ThanaModel();
-        $district = $this->request->getGet('district'); // Note: `district` is the district name (string)
-        $search = $this->request->getGet('q'); // optional search input
+        $district = $this->request->getGet('district');
+        $search = $this->request->getGet('q');
 
         if ($district) {
-            // Find the district ID by name
             $district_model = new DistrictModel();
             $district_row = $district_model->where('district', $district)->first();
 
             if ($district_row) {
                 $district_id = $district_row['id'];
 
-                $thanas = $thana_model
-                    ->where('district_id', $district_id)
-                    ->like('thana', $search)
-                    ->findAll();
+                $builder = $thana_model->where('district_id', $district_id);
+
+                if (!empty($search)) {
+                    $builder = $builder->like('thana', $search);
+                }
+
+                $thanas = $builder->findAll();
             } else {
                 $thanas = [];
             }
@@ -95,16 +97,10 @@ class ApiDataController extends BaseController
         ]);
     }
 
-    // In your controller
-    public function getThanasByDistrict()
-    {
-        $district_id = $this->request->getGet('district_id');
 
-        $thana_model = new \App\Models\ThanaModel();
-        $thanas = $thana_model->where('district_id', $district_id)->findAll();
 
-        return $this->response->setJSON(['data' => $thanas]);
-    }
+
+
 
 
 }

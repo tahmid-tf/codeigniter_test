@@ -209,7 +209,7 @@
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">District <span class="text-danger">*</span></label>
-                            <select name="district" class="form-select">
+                            <select name="district" class="form-select" id="district">
                                 <?php foreach ($districts as $district): ?>
                                     <option value="<?= esc($district['district']) ?>"><?= esc($district['district']) ?></option>
                                 <?php endforeach; ?>
@@ -217,7 +217,7 @@
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">Thana <span class="text-danger">*</span></label>
-                            <select name="thana" class="form-select">
+                            <select name="thana" class="form-select" id="thana">
                                 <?php foreach ($thanas as $thana): ?>
                                     <option value="<?= esc($thana['thana']) ?>"><?= esc($thana['thana']) ?></option>
                                 <?php endforeach; ?>
@@ -285,7 +285,7 @@
                         <div class="col-md-12">
                             <label class="form-label">District <span class="text-danger">*</span></label>
 
-                            <select name="district" class="form-select">
+                            <select name="district" class="form-select" id="district">
                                 <?php foreach ($districts as $district): ?>
                                     <option value="<?= esc($district['district']) ?>"><?= esc($district['district']) ?></option>
                                 <?php endforeach; ?>
@@ -295,7 +295,7 @@
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">Thana <span class="text-danger">*</span></label>
-                            <select name="thana" class="form-select">
+                            <select name="thana" class="form-select" id="thana">
                                 <?php foreach ($thanas as $thana): ?>
                                     <option value="<?= esc($thana['thana']) ?>"><?= esc($thana['thana']) ?></option>
                                 <?php endforeach; ?>
@@ -560,6 +560,43 @@
     });
 
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const districtSelect = document.getElementById('district');
+        const thanaSelect = document.getElementById('thana');
+
+        districtSelect.addEventListener('change', function () {
+            const selectedDistrict = this.value;
+
+            // Clear previous thanas
+            thanaSelect.innerHTML = '<option value="">Loading...</option>';
+
+            fetch(`/thana_by_district_api_data?district=${encodeURIComponent(selectedDistrict)}`)
+                .then(response => response.json())
+                .then(data => {
+                    thanaSelect.innerHTML = ''; // Clear again for fresh data
+
+                    if (data.data.length > 0) {
+                        data.data.forEach(thana => {
+                            const option = document.createElement('option');
+                            option.value = thana.thana;
+                            option.textContent = thana.thana;
+                            thanaSelect.appendChild(option);
+                        });
+                    } else {
+                        thanaSelect.innerHTML = '<option value="">No thanas found</option>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching thanas:', error);
+                    thanaSelect.innerHTML = '<option value="">Error loading thanas</option>';
+                });
+        });
+    });
+</script>
+
+
 
 
 </body>
