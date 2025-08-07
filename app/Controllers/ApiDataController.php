@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\BloodGroupModel;
 use App\Models\DistrictModel;
+use App\Models\ThanaModel;
 
 class ApiDataController extends BaseController
 {
@@ -43,6 +44,23 @@ class ApiDataController extends BaseController
 
         return $this->response->setJSON([
             'data' => $districts
+        ]);
+    }
+
+    public function thana_api_data()
+    {
+        $thana_model = new ThanaModel();
+        $search = $this->request->getGet('q');
+        if ($search) {
+            $thanas = $thana_model
+                ->like('thana', $search)
+                ->findAll();
+        }else{
+            $thanas = [];
+        }
+
+        return $this->response->setJSON([
+            'data' => $thanas
         ]);
     }
 

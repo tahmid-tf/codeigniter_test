@@ -127,14 +127,17 @@
 
         </div>
 
-        <!-- Filter Upazila -->
+        <!-- Filter Thana -->
         <div class="col-md-3 col-sm-12">
-            <select id="filter-upazila" class="form-select select2" data-placeholder="Filter Thana!">
-                <option></option>
-                <option>Mirpur</option>
-                <option>Gulshan</option>
-                <option>Savar</option>
-            </select>
+<!--            <select id="filter-upazila" class="form-select select2" data-placeholder="Filter Thana!">-->
+<!--                <option></option>-->
+<!--                <option>Mirpur</option>-->
+<!--                <option>Gulshan</option>-->
+<!--                <option>Savar</option>-->
+<!--            </select>-->
+
+            <select id="filter-upazila" class="form-select select2" data-placeholder="Filter Thana!"></select>
+
         </div>
 
         <!-- Donation Date -->
@@ -522,6 +525,40 @@
         });
     });
 </script>
+
+<!------ thana ----- -->
+
+<script>
+    $(function () {
+        // Thana select2 with AJAX
+        $('#filter-upazila').select2({
+            placeholder: 'Filter Thana!',
+            allowClear: true,
+            ajax: {
+                url: '/thana_api_data',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term // search query
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.data, function (thana) {
+                            return {
+                                id: thana.thana, // assuming the column name is `thana`
+                                text: thana.thana
+                            };
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+    });
+</script>
+
 
 
 </body>
