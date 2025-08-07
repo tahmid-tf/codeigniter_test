@@ -52,7 +52,7 @@
     <?php if (!session()->get('logged_in')): ?>
 
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrationModal">
-            Click to add yourself inb lood donor list to view all donors
+            Click to add yourself in blood donor list to view all donors
         </button>
 
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#LoginModal">
@@ -448,16 +448,49 @@
         });
 
         // AJAX-based select2: Thana/Upazila
+        // $('#filter-upazila').select2({
+        //     placeholder: 'Filter Thana!',
+        //     allowClear: true,
+        //     ajax: {
+        //         url: '/index.php/thana_api_data',
+        //         dataType: 'json',
+        //         delay: 250,
+        //         data: function (params) {
+        //             return {
+        //                 q: params.term
+        //             };
+        //         },
+        //         processResults: function (data) {
+        //             return {
+        //                 results: $.map(data.data, function (thana) {
+        //                     return {
+        //                         id: thana.thana,
+        //                         text: thana.thana
+        //                     };
+        //                 })
+        //             };
+        //         },
+        //         cache: true
+        //     }
+        // });
+
+
+        $('#filter-district').on('change', function () {
+            $('#filter-upazila').val(null).trigger('change'); // clear upazila when district changes
+        });
+
+        // AJAX-based select2: Thana/Upazila dependent on selected district
         $('#filter-upazila').select2({
             placeholder: 'Filter Thana!',
             allowClear: true,
             ajax: {
-                url: '/index.php/thana_api_data',
+                url: '/thana_by_district_api_data',
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
                     return {
-                        q: params.term
+                        q: params.term,
+                        district: $('#filter-district').val() // send selected district
                     };
                 },
                 processResults: function (data) {
@@ -473,6 +506,8 @@
                 cache: true
             }
         });
+
+
 
         // Initialize DataTable
         let table = $('#example').DataTable({
