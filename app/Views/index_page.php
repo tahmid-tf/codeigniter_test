@@ -199,33 +199,28 @@
                             <label class="form-label">Blood Group <span class="text-danger">*</span></label>
                             <select class="form-select" name="blood_group">
                                 <option></option>
-                                <option>A+</option>
-                                <option>A-</option>
-                                <option>B+</option>
-                                <option>B-</option>
-                                <option>AB+</option>
-                                <option>AB-</option>
-                                <option>O+</option>
-                                <option>O-</option>
+                                <?php foreach ($blood_groups as $group): ?>
+                                    <option value="<?= esc($group['blood_group']) ?>"
+                                            <?= esc(session('blood_group')) == $group['blood_group'] ? 'selected="selected"' : '' ?>>
+                                        <?= esc($group['blood_group']) ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">District <span class="text-danger">*</span></label>
-                            <select class="form-select" required name="district">
-                                <option></option>
-                                <option>Dhaka</option>
-                                <option>Chattogram</option>
-                                <option>Rajshahi</option>
-                                <option>Khulna</option>
+                            <select name="district" class="form-select">
+                                <?php foreach ($districts as $district): ?>
+                                    <option value="<?= esc($district['district']) ?>"><?= esc($district['district']) ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">Thana <span class="text-danger">*</span></label>
-                            <select class="form-select" required name="thana">
-                                <option></option>
-                                <option>Mirpur</option>
-                                <option>Gulshan</option>
-                                <option>Savar</option>
+                            <select name="thana" class="form-select">
+                                <?php foreach ($thanas as $thana): ?>
+                                    <option value="<?= esc($thana['thana']) ?>"><?= esc($thana['thana']) ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="col-md-12">
