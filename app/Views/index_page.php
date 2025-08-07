@@ -90,22 +90,22 @@
     <div class="row g-3">
         <!-- Filter Group -->
         <div class="col-md-3 col-sm-12">
-<!--            <select id="filter-group" class="form-select select2" data-placeholder="Filter Group">-->
-<!--                <option></option>-->
-<!--                <option>A+</option>-->
-<!--                <option>A-</option>-->
-<!--                <option>B+</option>-->
-<!--                <option>B-</option>-->
-<!--                <option>AB+</option>-->
-<!--                <option>AB-</option>-->
-<!--                <option>O+</option>-->
-<!--                <option>O-</option>-->
-<!--            </select>-->
-
-
             <select id="filter-group" class="form-select select2" data-placeholder="Filter Group">
                 <option></option>
+                <option>A+</option>
+                <option>A-</option>
+                <option>B+</option>
+                <option>B-</option>
+                <option>AB+</option>
+                <option>AB-</option>
+                <option>O+</option>
+                <option>O-</option>
             </select>
+
+
+<!--            <select id="filter-group" class="form-select select2" data-placeholder="Filter Group">-->
+<!--                <option></option>-->
+<!--            </select>-->
 
 
         </div>
@@ -409,15 +409,96 @@
 
 <script>
     $(document).ready(function () {
-        // Initialize all select2 filters
-        $('.select2').select2({
+        // Non-AJAX select2 initialization (optional)
+        $('.select2:not(#filter-upazila):not(#filter-district):not(#filter-group)').select2({
             allowClear: true,
             placeholder: function () {
                 return $(this).data('placeholder');
             }
         });
 
-        // Initialize DataTable with AJAX
+        // AJAX-based select2: Blood Group
+        $('#filter-group').select2({
+            placeholder: 'Filter Blood Group',
+            allowClear: true,
+            ajax: {
+                url: '/blood_group_api_data',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.data, function (group) {
+                            return {
+                                id: group.blood_group,
+                                text: group.blood_group
+                            };
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+
+        // AJAX-based select2: District
+        $('#filter-district').select2({
+            placeholder: 'Filter District',
+            allowClear: true,
+            ajax: {
+                url: '/districts_api_data',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.data, function (district) {
+                            return {
+                                id: district.district,
+                                text: district.district
+                            };
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+
+        // AJAX-based select2: Thana/Upazila
+        $('#filter-upazila').select2({
+            placeholder: 'Filter Thana!',
+            allowClear: true,
+            ajax: {
+                url: '/index.php/thana_api_data',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.data, function (thana) {
+                            return {
+                                id: thana.thana,
+                                text: thana.thana
+                            };
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+
+        // Initialize DataTable
         let table = $('#example').DataTable({
             ajax: {
                 url: '/user_data',
@@ -434,8 +515,7 @@
             ]
         });
 
-
-        // Reload DataTable with filters
+        // Reload table when filters change
         function reloadTableWithFilters() {
             let blood_group = $('#filter-group').val();
             let district = $('#filter-district').val();
@@ -443,121 +523,18 @@
             let date_filter = $('#filter-date').val();
 
             table.ajax.url(
-                '/user_data?group=' + encodeURIComponent(blood_group) +
-                '&district=' + encodeURIComponent(district) +
-                '&thana=' + encodeURIComponent(thana) +
-                '&date=' + encodeURIComponent(date_filter)
+                '/user_data?group=' + encodeURIComponent(blood_group || '') +
+                '&district=' + encodeURIComponent(district || '') +
+                '&thana=' + encodeURIComponent(thana || '') +
+                '&date=' + encodeURIComponent(date_filter || '')
             ).load();
         }
 
         // Trigger filter
-        $('#filter-group, #filter-district, #filter-upazila, #filter-date').on('change', function () {
-            reloadTableWithFilters();
-        });
+        $('#filter-group, #filter-district, #filter-upazila, #filter-date').on('change', reloadTableWithFilters);
     });
 </script>
 
-
-
-<!-- -------------------------------- Filter group, filter district, filter upazilla action test --------------------------------  -->
-
-<!-- blood group portion -->
-<script>
-    $(document).ready(function () {
-        $('#filter-group').select2({
-            placeholder: $('#filter-group').data('placeholder'),
-            allowClear: true,
-            minimumInputLength: 1, // require at least 1 character before sending AJAX request
-            ajax: {
-                url: '/blood_group_api_data',
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        q: params.term // search term sent as 'q'
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data.data.map(function (item) {
-                            return {
-                                id: item.blood_group,
-                                text: item.blood_group
-                            };
-                        })
-                    };
-                },
-                cache: true
-            }
-        });
-    });
-</script>
-
-<!-- --- district portion --- -->
-
-<script>
-    $(function () {
-        // District select2 with AJAX
-        $('#filter-district').select2({
-            placeholder: 'Filter District',
-            allowClear: true,
-            ajax: {
-                url: '/districts_api_data',
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        q: params.term // search query
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: $.map(data.data, function (district) {
-                            return {
-                                id: district.district,    // assuming the column name is `district`
-                                text: district.district
-                            };
-                        })
-                    };
-                },
-                cache: true
-            }
-        });
-    });
-</script>
-
-<!------ thana ----- -->
-
-<script>
-    $(function () {
-        // Thana select2 with AJAX
-        $('#filter-upazila').select2({
-            placeholder: 'Filter Thana!',
-            allowClear: true,
-            ajax: {
-                url: '/thana_api_data',
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        q: params.term // search query
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: $.map(data.data, function (thana) {
-                            return {
-                                id: thana.thana, // assuming the column name is `thana`
-                                text: thana.thana
-                            };
-                        })
-                    };
-                },
-                cache: true
-            }
-        });
-    });
-</script>
 
 
 
