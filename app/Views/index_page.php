@@ -562,40 +562,40 @@
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const districtSelect = document.getElementById('district');
-        const thanaSelect = document.getElementById('thana');
+    $(document).ready(function () {
+        $('#district').on('change', function () {
+            var selectedDistrict = $(this).val();
+            var $thanaSelect = $('#thana');
 
-        districtSelect.addEventListener('change', function () {
-            const selectedDistrict = this.value;
+            // Show loading message
+            $thanaSelect.html('<option value="">Loading...</option>');
 
-            // Clear previous thanas
-            thanaSelect.innerHTML = '<option value="">Loading...</option>';
-
-            fetch(`/thana_by_district_api_data?district=${encodeURIComponent(selectedDistrict)}`)
-                .then(response => response.json())
-                .then(data => {
-                    thanaSelect.innerHTML = ''; // Clear again for fresh data
+            $.ajax({
+                url: '/thana_by_district_api_data',
+                type: 'GET',
+                data: { district: selectedDistrict },
+                dataType: 'json',
+                success: function (data) {
+                    $thanaSelect.empty(); // Clear options
 
                     if (data.data.length > 0) {
-                        data.data.forEach(thana => {
-                            const option = document.createElement('option');
-                            option.value = thana.thana;
-                            option.textContent = thana.thana;
-                            thanaSelect.appendChild(option);
+                        $.each(data.data, function (index, thana) {
+                            $thanaSelect.append(
+                                $('<option></option>').val(thana.thana).text(thana.thana)
+                            );
                         });
                     } else {
-                        thanaSelect.innerHTML = '<option value="">No thanas found</option>';
+                        $thanaSelect.html('<option value="">No thanas found</option>');
                     }
-                })
-                .catch(error => {
-                    console.error('Error fetching thanas:', error);
-                    thanaSelect.innerHTML = '<option value="">Error loading thanas</option>';
-                });
+                },
+                error: function () {
+                    console.error('Error fetching thanas');
+                    $thanaSelect.html('<option value="">Error loading thanas</option>');
+                }
+            });
         });
     });
 </script>
-
 
 
 
