@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\BloodGroupModel;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use DateTime;
@@ -11,7 +12,13 @@ class BaseIndexController extends BaseController
 {
     public function index()
     {
-        return view("index_page");
+//  --------------- blood group data ---------------
+
+        $blood_group_model = new BloodGroupModel();
+        $blood_groups = $blood_group_model->findAll();
+
+
+        return view("index_page", ['blood_groups' => $blood_groups]);
     }
 
     public function registration_form()
@@ -129,16 +136,27 @@ class BaseIndexController extends BaseController
 
         // Prepare data array
         $data = [
-            'name'          => $this->request->getPost('name'),
-            'contact'       => $this->request->getPost('contact'),
-            'blood_group'   => $this->request->getPost('blood_group'),
-            'district'      => $this->request->getPost('district'),
-            'thana'         => $this->request->getPost('thana'),
+            'name' => $this->request->getPost('name'),
+            'contact' => $this->request->getPost('contact'),
+            'blood_group' => $this->request->getPost('blood_group'),
+            'district' => $this->request->getPost('district'),
+            'thana' => $this->request->getPost('thana'),
             'donation_date' => $this->request->getPost('donation_date'),
-            'password'      => $newPassword ? password_hash($newPassword, PASSWORD_DEFAULT) : $existingUser['password']
+            'password' => $newPassword ? password_hash($newPassword, PASSWORD_DEFAULT) : $existingUser['password']
         ];
 
         $model->update($id, $data);
+
+        session()->set([
+            'user_id' => $id,
+            'name'    => $data['name'],
+            'contact'   => $data['contact'],
+            'blood_group'   => $data['blood_group'],
+            'district'   => $data['district'],
+            'thana'   => $data['thana'],
+            'donation_date'   => $data['donation_date'],
+            'logged_in' => true
+        ]);
 
         return redirect()->back()->with('message', 'User updated successfully');
     }

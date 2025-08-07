@@ -90,22 +90,22 @@
     <div class="row g-3">
         <!-- Filter Group -->
         <div class="col-md-3 col-sm-12">
-            <select id="filter-group" class="form-select select2" data-placeholder="Filter Group">
-                <option></option>
-                <option>A+</option>
-                <option>A-</option>
-                <option>B+</option>
-                <option>B-</option>
-                <option>AB+</option>
-                <option>AB-</option>
-                <option>O+</option>
-                <option>O-</option>
-            </select>
-
-
 <!--            <select id="filter-group" class="form-select select2" data-placeholder="Filter Group">-->
 <!--                <option></option>-->
+<!--                <option>A+</option>-->
+<!--                <option>A-</option>-->
+<!--                <option>B+</option>-->
+<!--                <option>B-</option>-->
+<!--                <option>AB+</option>-->
+<!--                <option>AB-</option>-->
+<!--                <option>O+</option>-->
+<!--                <option>O-</option>-->
 <!--            </select>-->
+
+
+            <select id="filter-group" class="form-select select2" data-placeholder="Filter Group">
+                <option></option>
+            </select>
 
 
         </div>
@@ -274,36 +274,18 @@
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">Blood Group <span class="text-danger">*</span></label>
+
                             <select class="form-select" name="blood_group">
                                 <option></option>
-                                <option value="A+" <?= esc(session('blood_group')) == 'A+' ? 'selected="selected"' : '' ?>>
-                                    A+
-                                </option>
-                                <option value="A+" <?= esc(session('blood_group')) == 'A+' ? 'selected="selected"' : '' ?>>
-                                    A+
-                                </option>
-                                <option value="A-" <?= esc(session('blood_group')) == 'A-' ? 'selected="selected"' : '' ?>>
-                                    A-
-                                </option>
-                                <option value="B+" <?= esc(session('blood_group')) == 'B+' ? 'selected="selected"' : '' ?>>
-                                    B+
-                                </option>
-                                <option value="B-" <?= esc(session('blood_group')) == 'B-' ? 'selected="selected"' : '' ?>>
-                                    B-
-                                </option>
-                                <option value="AB+" <?= esc(session('blood_group')) == 'AB+' ? 'selected="selected"' : '' ?>>
-                                    AB+
-                                </option>
-                                <option value="AB-" <?= esc(session('blood_group')) == 'AB-' ? 'selected="selected"' : '' ?>>
-                                    AB-
-                                </option>
-                                <option value="O+" <?= esc(session('blood_group')) == 'O+' ? 'selected="selected"' : '' ?>>
-                                    O+
-                                </option>
-                                <option value="O-" <?= esc(session('blood_group')) == 'O-' ? 'selected="selected"' : '' ?>>
-                                    O-
-                                </option>
+                                <?php foreach ($blood_groups as $group): ?>
+                                    <option value="<?= esc($group['blood_group']) ?>"
+                                            <?= esc(session('blood_group')) == $group['blood_group'] ? 'selected="selected"' : '' ?>>
+                                        <?= esc($group['blood_group']) ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
+
+
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">District <span class="text-danger">*</span></label>
