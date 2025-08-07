@@ -290,13 +290,10 @@
                         <div class="col-md-12">
                             <label class="form-label">District <span class="text-danger">*</span></label>
 
-                            <select class="form-select" required name="district">
-                                <option value="" <?= session('district') == '' ? 'selected="selected"' : '' ?>></option>
+                            <select id="update-district" name="district" class="form-select">
+                                <option value="">Select District</option>
                                 <?php foreach ($districts as $district): ?>
-                                    <option value="<?= esc($district['district']) ?>"
-                                            <?= session('district') == $district['district'] ? 'selected="selected"' : '' ?>>
-                                        <?= esc($district['district']) ?>
-                                    </option>
+                                    <option value="<?= $district['id']; ?>"><?= $district['district']; ?></option>
                                 <?php endforeach; ?>
                             </select>
 
@@ -304,14 +301,9 @@
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">Thana <span class="text-danger">*</span></label>
-                            <select class="form-select" required name="thana">
-                                <option value="" <?= session('thana') == '' ? 'selected="selected"' : '' ?>></option>
-                                <?php foreach ($thanas as $thana): ?>
-                                    <option value="<?= esc($thana['thana']) ?>"
-                                            <?= session('thana') == $thana['thana'] ? 'selected="selected"' : '' ?>>
-                                        <?= esc($thana['thana']) ?>
-                                    </option>
-                                <?php endforeach; ?>
+                            <select id="update-thana" name="thana" class="form-select">
+                                <option value="">Select Thana</option>
+                                <!-- Options will be loaded dynamically -->
                             </select>
 
                         </div>
@@ -544,6 +536,34 @@
         // Trigger filter
         $('#filter-group, #filter-district, #filter-upazila, #filter-date').on('change', reloadTableWithFilters);
     });
+
+    // ------------------ get district and data dynamically for modals
+
+    $(document).ready(function () {
+        $('#update-district').on('change', function () {
+            var districtId = $(this).val();
+
+            $('#update-thana').html('<option value="">Loading...</option>');
+
+            if (districtId) {
+                $.ajax({
+                    url: '/get-thanas-by-district',
+                    type: 'GET',
+                    data: { district_id: districtId },
+                    dataType: 'json',
+                    success: function (response) {
+                        $('#update-thana').empty().append('<option value="">Select Thana</option>');
+                        $.each(response.data, function (index, thana) {
+                            $('#update-thana').append('<option value="' + thana.id + '">' + thana.thana + '</option>');
+                        });
+                    }
+                });
+            } else {
+                $('#update-thana').html('<option value="">Select Thana</option>');
+            }
+        });
+    });
+
 </script>
 
 

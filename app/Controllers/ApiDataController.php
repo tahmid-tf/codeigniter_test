@@ -95,6 +95,16 @@ class ApiDataController extends BaseController
         ]);
     }
 
-    
+    // In your controller
+    public function getThanasByDistrict()
+    {
+        $district_id = $this->request->getGet('district_id');
+
+        $thana_model = new \App\Models\ThanaModel();
+        $thanas = $thana_model->where('district_id', $district_id)->findAll();
+
+        return $this->response->setJSON(['data' => $thanas]);
+    }
+
 
 }
