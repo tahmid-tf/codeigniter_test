@@ -290,10 +290,9 @@
                         <div class="col-md-12">
                             <label class="form-label">District <span class="text-danger">*</span></label>
 
-                            <select id="update-district" name="district" class="form-select">
-                                <option value="">Select District</option>
+                            <select name="district" class="form-select">
                                 <?php foreach ($districts as $district): ?>
-                                    <option value="<?= $district['id']; ?>"><?= $district['district']; ?></option>
+                                    <option value="<?= esc($district['district']) ?>"><?= esc($district['district']) ?></option>
                                 <?php endforeach; ?>
                             </select>
 
@@ -301,9 +300,10 @@
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">Thana <span class="text-danger">*</span></label>
-                            <select id="update-thana" name="thana" class="form-select">
-                                <option value="">Select Thana</option>
-                                <!-- Options will be loaded dynamically -->
+                            <select name="thana" class="form-select">
+                                <?php foreach ($thanas as $thana): ?>
+                                    <option value="<?= esc($thana['thana']) ?>"><?= esc($thana['thana']) ?></option>
+                                <?php endforeach; ?>
                             </select>
 
                         </div>
