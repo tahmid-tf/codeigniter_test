@@ -42,7 +42,7 @@
 <div class="container text-center my-4">
   <span>
     Connecting blood donors across Bangladesh to save lives! -
-    <a href="#">Join our mission today</a>
+    <a href="https://ourcomunity.org/">Join our mission today</a>
   </span>
 </div>
 
