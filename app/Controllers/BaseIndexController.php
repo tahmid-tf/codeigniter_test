@@ -116,4 +116,31 @@ class BaseIndexController extends BaseController
     }
 
 
+    public function updateUser()
+    {
+        $id = $this->request->getPost('id');
+        $model = new \App\Models\UserModel();
+
+        // Get existing user data
+        $existingUser = $model->find($id);
+
+        // Get new password input
+        $newPassword = $this->request->getPost('password');
+
+        // Prepare data array
+        $data = [
+            'name'          => $this->request->getPost('name'),
+            'contact'       => $this->request->getPost('contact'),
+            'blood_group'   => $this->request->getPost('blood_group'),
+            'district'      => $this->request->getPost('district'),
+            'thana'         => $this->request->getPost('thana'),
+            'donation_date' => $this->request->getPost('donation_date'),
+            'password'      => $newPassword ? password_hash($newPassword, PASSWORD_DEFAULT) : $existingUser['password']
+        ];
+
+        $model->update($id, $data);
+
+        return redirect()->back()->with('message', 'User updated successfully');
+    }
+
 }

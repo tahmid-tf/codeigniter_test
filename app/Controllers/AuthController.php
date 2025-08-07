@@ -20,6 +20,11 @@ class AuthController extends BaseController
             session()->set([
                 'user_id' => $user['id'],
                 'name'    => $user['name'],
+                'contact'   => $user['contact'],
+                'blood_group'   => $user['blood_group'],
+                'district'   => $user['district'],
+                'thana'   => $user['thana'],
+                'donation_date'   => $user['donation_date'],
                 'logged_in' => true
             ]);
             return redirect()->back();
