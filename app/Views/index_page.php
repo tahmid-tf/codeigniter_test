@@ -285,9 +285,14 @@
                         <div class="col-md-12">
                             <label class="form-label">District <span class="text-danger">*</span></label>
 
-                            <select name="district" class="form-select" id="district">
+                            <?php $selectedDistrict = session('district'); ?>
+
+                            <select name="district" class="form-select" id="district2">
                                 <?php foreach ($districts as $district): ?>
-                                    <option value="<?= esc($district['district']) ?>"><?= esc($district['district']) ?></option>
+                                    <option value="<?= esc($district['district']) ?>"
+                                            <?= ($district['district'] == $selectedDistrict) ? 'selected' : '' ?>>
+                                        <?= esc($district['district']) ?>
+                                    </option>
                                 <?php endforeach; ?>
                             </select>
 
@@ -295,7 +300,7 @@
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">Thana <span class="text-danger">*</span></label>
-                            <select name="thana" class="form-select" id="thana">
+                            <select name="thana" class="form-select" id="thana2">
                                 <?php foreach ($thanas as $thana): ?>
                                     <option value="<?= esc($thana['thana']) ?>"><?= esc($thana['thana']) ?></option>
                                 <?php endforeach; ?>
@@ -495,7 +500,6 @@
         });
 
 
-
         // Initialize DataTable
         let table = $('#example').DataTable({
             ajax: {
@@ -544,7 +548,7 @@
                 $.ajax({
                     url: '/get-thanas-by-district',
                     type: 'GET',
-                    data: { district_id: districtId },
+                    data: {district_id: districtId},
                     dataType: 'json',
                     success: function (response) {
                         $('#update-thana').empty().append('<option value="">Select Thana</option>');
@@ -561,6 +565,8 @@
 
 </script>
 
+<!-- -------------------------- district and division code for create modal -------------------------- -->
+
 <script>
     $(document).ready(function () {
         $('#district').on('change', function () {
@@ -573,7 +579,7 @@
             $.ajax({
                 url: '/thana_by_district_api_data',
                 type: 'GET',
-                data: { district: selectedDistrict },
+                data: {district: selectedDistrict},
                 dataType: 'json',
                 success: function (data) {
                     $thanaSelect.empty(); // Clear options
@@ -597,7 +603,43 @@
     });
 </script>
 
+<!-- -------------------------- district and division code for update modal -------------------------- -->
 
+<script>
+    $(document).ready(function () {
+        $('#district2').on('change', function () {
+            var selectedDistrict = $(this).val();
+            var $thanaSelect = $('#thana2');
+
+            // Show loading message
+            $thanaSelect.html('<option value="">Loading...</option>');
+
+            $.ajax({
+                url: '/thana_by_district_api_data',
+                type: 'GET',
+                data: {district: selectedDistrict},
+                dataType: 'json',
+                success: function (data) {
+                    $thanaSelect.empty(); // Clear options
+
+                    if (data.data.length > 0) {
+                        $.each(data.data, function (index, thana) {
+                            $thanaSelect.append(
+                                $('<option></option>').val(thana.thana).text(thana.thana)
+                            );
+                        });
+                    } else {
+                        $thanaSelect.html('<option value="">No thanas found</option>');
+                    }
+                },
+                error: function () {
+                    console.error('Error fetching thanas');
+                    $thanaSelect.html('<option value="">Error loading thanas</option>');
+                }
+            });
+        });
+    });
+</script>
 
 </body>
 </html>
