@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\BloodGroupModel;
+use App\Models\DistrictModel;
+use App\Models\ThanaModel;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use DateTime;
@@ -17,8 +19,21 @@ class BaseIndexController extends BaseController
         $blood_group_model = new BloodGroupModel();
         $blood_groups = $blood_group_model->findAll();
 
+//  --------------- districts data ---------------
 
-        return view("index_page", ['blood_groups' => $blood_groups]);
+        $district_model = new DistrictModel();
+        $districts = $district_model->findAll();
+
+//  --------------- thana data ---------------
+
+        $thana_model = new ThanaModel();
+        $thanas = $thana_model->findAll();
+
+        return view("index_page", [
+            'blood_groups' => $blood_groups,
+            'districts' => $districts,
+            'thanas' => $thanas
+        ]);
     }
 
     public function registration_form()
@@ -149,12 +164,12 @@ class BaseIndexController extends BaseController
 
         session()->set([
             'user_id' => $id,
-            'name'    => $data['name'],
-            'contact'   => $data['contact'],
-            'blood_group'   => $data['blood_group'],
-            'district'   => $data['district'],
-            'thana'   => $data['thana'],
-            'donation_date'   => $data['donation_date'],
+            'name' => $data['name'],
+            'contact' => $data['contact'],
+            'blood_group' => $data['blood_group'],
+            'district' => $data['district'],
+            'thana' => $data['thana'],
+            'donation_date' => $data['donation_date'],
             'logged_in' => true
         ]);
 

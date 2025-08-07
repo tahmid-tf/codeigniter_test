@@ -52,7 +52,7 @@
     <?php if (!session()->get('logged_in')): ?>
 
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrationModal">
-            Click to add yourself in blood donor list to view all donors
+            Click to add yourself inb lood donor list to view all donors
         </button>
 
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#LoginModal">
@@ -90,17 +90,17 @@
     <div class="row g-3">
         <!-- Filter Group -->
         <div class="col-md-3 col-sm-12">
-<!--            <select id="filter-group" class="form-select select2" data-placeholder="Filter Group">-->
-<!--                <option></option>-->
-<!--                <option>A+</option>-->
-<!--                <option>A-</option>-->
-<!--                <option>B+</option>-->
-<!--                <option>B-</option>-->
-<!--                <option>AB+</option>-->
-<!--                <option>AB-</option>-->
-<!--                <option>O+</option>-->
-<!--                <option>O-</option>-->
-<!--            </select>-->
+            <!--            <select id="filter-group" class="form-select select2" data-placeholder="Filter Group">-->
+            <!--                <option></option>-->
+            <!--                <option>A+</option>-->
+            <!--                <option>A-</option>-->
+            <!--                <option>B+</option>-->
+            <!--                <option>B-</option>-->
+            <!--                <option>AB+</option>-->
+            <!--                <option>AB-</option>-->
+            <!--                <option>O+</option>-->
+            <!--                <option>O-</option>-->
+            <!--            </select>-->
 
 
             <select id="filter-group" class="form-select select2" data-placeholder="Filter Group">
@@ -114,13 +114,13 @@
 
 
         <div class="col-md-3 col-sm-12">
-<!--            <select id="filter-district" class="form-select select2" data-placeholder="Filter District">-->
-<!--                <option></option>-->
-<!--                <option>Dhaka</option>-->
-<!--                <option>Chattogram</option>-->
-<!--                <option>Rajshahi</option>-->
-<!--                <option>Khulna</option>-->
-<!--            </select>-->
+            <!--            <select id="filter-district" class="form-select select2" data-placeholder="Filter District">-->
+            <!--                <option></option>-->
+            <!--                <option>Dhaka</option>-->
+            <!--                <option>Chattogram</option>-->
+            <!--                <option>Rajshahi</option>-->
+            <!--                <option>Khulna</option>-->
+            <!--            </select>-->
 
             <select id="filter-district" class="form-select select2" data-placeholder="Filter District"></select>
 
@@ -129,12 +129,12 @@
 
         <!-- Filter Thana -->
         <div class="col-md-3 col-sm-12">
-<!--            <select id="filter-upazila" class="form-select select2" data-placeholder="Filter Thana!">-->
-<!--                <option></option>-->
-<!--                <option>Mirpur</option>-->
-<!--                <option>Gulshan</option>-->
-<!--                <option>Savar</option>-->
-<!--            </select>-->
+            <!--            <select id="filter-upazila" class="form-select select2" data-placeholder="Filter Thana!">-->
+            <!--                <option></option>-->
+            <!--                <option>Mirpur</option>-->
+            <!--                <option>Gulshan</option>-->
+            <!--                <option>Savar</option>-->
+            <!--            </select>-->
 
             <select id="filter-upazila" class="form-select select2" data-placeholder="Filter Thana!"></select>
 
@@ -289,37 +289,31 @@
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">District <span class="text-danger">*</span></label>
+
                             <select class="form-select" required name="district">
                                 <option value="" <?= session('district') == '' ? 'selected="selected"' : '' ?>></option>
-                                <option value="Dhaka" <?= session('district') == 'Dhaka' ? 'selected="selected"' : '' ?>>
-                                    Dhaka
-                                </option>
-                                <option value="Chattogram" <?= session('district') == 'Chattogram' ? 'selected="selected"' : '' ?>>
-                                    Chattogram
-                                </option>
-                                <option value="Rajshahi" <?= session('district') == 'Rajshahi' ? 'selected="selected"' : '' ?>>
-                                    Rajshahi
-                                </option>
-                                <option value="Khulna" <?= session('district') == 'Khulna' ? 'selected="selected"' : '' ?>>
-                                    Khulna
-                                </option>
+                                <?php foreach ($districts as $district): ?>
+                                    <option value="<?= esc($district['district']) ?>"
+                                            <?= session('district') == $district['district'] ? 'selected="selected"' : '' ?>>
+                                        <?= esc($district['district']) ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
+
 
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">Thana <span class="text-danger">*</span></label>
                             <select class="form-select" required name="thana">
                                 <option value="" <?= session('thana') == '' ? 'selected="selected"' : '' ?>></option>
-                                <option value="Mirpur" <?= session('thana') == 'Mirpur' ? 'selected="selected"' : '' ?>>
-                                    Mirpur
-                                </option>
-                                <option value="Gulshan" <?= session('thana') == 'Gulshan' ? 'selected="selected"' : '' ?>>
-                                    Gulshan
-                                </option>
-                                <option value="Savar" <?= session('thana') == 'Savar' ? 'selected="selected"' : '' ?>>
-                                    Savar
-                                </option>
+                                <?php foreach ($thanas as $thana): ?>
+                                    <option value="<?= esc($thana['thana']) ?>"
+                                            <?= session('thana') == $thana['thana'] ? 'selected="selected"' : '' ?>>
+                                        <?= esc($thana['thana']) ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
+
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">Last Donation Date <span class="text-danger">*</span></label>
@@ -516,8 +510,6 @@
         $('#filter-group, #filter-district, #filter-upazila, #filter-date').on('change', reloadTableWithFilters);
     });
 </script>
-
-
 
 
 </body>
